@@ -47,7 +47,7 @@ class TrueCase:
         Load the model file to do truecasting.
         The model will be load onto distribution_words attribute.
         """
-        with open(self.modelfile, 'r', encoding='utf') as f:
+        with open(self.modelfile, 'r', encoding='utf-8') as f:
             word_distributions = map(lambda distribution: distribution.strip().split(' '), f.readlines())
 
         for word, distribution in word_distributions:
