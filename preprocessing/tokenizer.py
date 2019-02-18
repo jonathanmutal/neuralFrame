@@ -1,9 +1,6 @@
 import mosestokenizer
 
 
-import mosestokenizer
-
-
 class Tokenizer:
     """
     This class will be a wrapper of MosesTokenizer.
