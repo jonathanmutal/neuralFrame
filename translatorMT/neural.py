@@ -10,6 +10,7 @@ from opennmt.config import load_config, load_model
 class Neural:
     """
     This class will be wrapped class from openNMT-tf.
+    https://arxiv.org/abs/1701.02810
     """
     def __init__(self, config):
         """
