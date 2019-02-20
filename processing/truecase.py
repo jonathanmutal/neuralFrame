@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+from processing.utils import which_encoding
+
 
 class TrueCase:
     """
@@ -25,8 +27,8 @@ class TrueCase:
         :infile: path to the train data.
         return a model in modelfile.
         """
-        train_file = open(self.infile, 'r', encoding=encoding_file(self.infile))
-        sentences = [sentences.strip().split() for sentences in train_file.readlines()]        
+        train_file = open(self.infile, 'r', encoding=which_encoding(self.infile))
+        sentences = [sentences.strip().split() for sentences in train_file.readlines()]
         
         for sentence in sentences:
             for word in sentence:
@@ -38,7 +40,7 @@ class TrueCase:
             # dump a file with the distribution
             # word times_lower/times_upper
             model_file.write('{0} {1}/{2}\n'.format(word, distribution[0], distribution[1]))
-        
+
         train_file.close()
         model_file.close()
 
@@ -61,7 +63,7 @@ class TrueCase:
         return true if is an upper word.
         """
         return max(self.distribution_words[word].items(), lambda p: p[1])[0]
-    
+
     def is_upper_sentence(sentence):
         """
         This method will return if the first word of the sentences
@@ -71,7 +73,7 @@ class TrueCase:
         """
         first_word = sentence.split(' ')[0]
         return self.is_upper(first_word)
-    
+
     def upper_first_word(self, sentence):
         """
         This method will upper the first word of the sentence
@@ -79,7 +81,7 @@ class TrueCase:
         return the sentences with the first word uppered.
         """
         return sentence[0].upper() + sentence[1:]
-    
+
     def true_case_sentence(self, sentence):
         """
         True case a single sentence with the distribution_words model.
@@ -100,3 +102,15 @@ class TrueCase:
         if self.is_upper_sentence(source_s):
             target_s = self.upper_first_word(target_s)
         return target_s
+
+    def recaser_sentences(self, source_sents, target_sents):
+        """
+        Recase all the target sentences depend on source sentences.
+        :source_sents: list of source sentences
+        :target_sents: list of target sentences
+        return a list of recases sentences
+        """
+        target_recase = []
+        for source, target in zip(source_sents, target_sents):
+            target_recase.append(self.recaser_sentence(source, target))
+        return target_recase
