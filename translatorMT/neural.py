@@ -25,9 +25,9 @@ class Neural:
                 self.__config.update(yaml.load(f.read()))
         self.__config['model_type'] = config['model_type']
         self.__config['checkpoint_path'] = config['checkpoint_path']
-        
-        
-        model = load_model(self.__config["model_dir"], model_name=self.__config['model_type'])
+
+        model = load_model(self.__config["model_dir"],
+                           model_name=self.__config['model_type'])
         self.model = Runner(model, self.__config)
 
 
@@ -44,7 +44,9 @@ class Neural:
 
         file_translated = tempfile.NamedTemporaryFile('w', delete=False)
         file_translated.close()
-        self.model.infer(features_file=file_to_translate.name, predictions_file=file_translated.name, checkpoint_path=self.__config['checkpoint_path'])
+        self.model.infer(features_file=file_to_translate.name,
+                         predictions_file=file_translated.name,
+                         checkpoint_path=self.__config['checkpoint_path'])
         with open(file_translated.name, 'r') as f:
             sentences_translated = f.readlines()
         return sentences_translated
