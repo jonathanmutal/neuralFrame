@@ -1,6 +1,7 @@
 from subword_nmt.learn_bpe import learn_bpe
 from subword_nmt.apply_bpe import BPE
 
+from processing.utils import which_encoding
 
 class Subword:
     """
@@ -27,7 +28,6 @@ class Subword:
     def __learn(self):
         """
         Train a BPE.
-
         :trainfile: a file path which the model will learn.
         :codesfile: the output codes file.
         :num_symbols: number of vocabulary.
@@ -40,7 +40,7 @@ class Subword:
 
     def subword_sentence(self, sentence):
         """
-        :sentence: string which will be process.
+        :sentence: a list of words which will process.
         return a pre-proccesed sentences with bpe.
         """
         return self.__bpe.process_line(sentence)
@@ -51,6 +51,20 @@ class Subword:
         it will generate a codes file with train_file.
         return a list of from preprocesed sentences from infile.
         """
-        with open(infile, 'r', encoding=encoding_file(infile)) as f:
+        with open(infile, 'r', encoding=which_encoding(infile)) as f:
             sentences = f.readlines()
         return list(map(lambda sent: self.subword_sentence(sent.strip()), sentences))
+
+    def de_subwords(self, sentence):
+        """
+        Removing the @@ for the sentence.
+        :sentence: a sentence string
+        """
+        return re.sub('@@ ', '', sentence)
+
+    def de_subwords_sentences(self, sentences):
+        """
+        List of sentence to remove @@
+        :sentences: remove @@ for all the sentences in sentences
+        """
+        return list((map(self.de_subwords, sentences)))
