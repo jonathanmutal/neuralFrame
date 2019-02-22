@@ -13,4 +13,9 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/joni115/neuralFrame",
     packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3.6",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: Linux",
+    ],
 )
