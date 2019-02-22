@@ -53,7 +53,7 @@ class TrueCase:
 
         for word, distribution in word_distributions:
             lower, upper = distribution.split('/')
-            self.distribution_words[word] = {0: lower, 1: upper}
+            self.distribution_words[word] = {0: int(lower), 1: int(upper)}
 
     def is_upper(self, word):
         """
@@ -61,7 +61,7 @@ class TrueCase:
         :word: string
         return true if is an upper word.
         """
-        return max(self.distribution_words[word].items(), lambda p: p[1])[0]
+        return max(self.distribution_words.get(word.lower(), {0: 1, 1:0}).items(), key=lambda p: p[1])[0]
 
     def is_upper_sentence(self, sentence):
         """
