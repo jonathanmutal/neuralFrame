@@ -1,4 +1,5 @@
 import chardet
+import re
 
 
 def which_encoding(infile):
