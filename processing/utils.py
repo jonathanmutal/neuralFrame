@@ -1,3 +1,6 @@
+import chardet
+
+
 def which_encoding(infile):
     """
     :infile: guess the infile encoding.

@@ -1,5 +1,6 @@
 from processing.tokenizer import Tokenizer, Detokenizer
 from processing.subword import Subword
+from processing.truecase import TrueCase
 from translatorMT.neural import Neural
 
 
