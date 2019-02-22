@@ -134,5 +134,5 @@ class TrueCase:
         """
         target_recase = []
         for source, target in zip(source_sents, target_sents):
-            target_recase.append(self.recaser_sentence(source_s, target_s))
+            target_recase.append(self.recaser_sentence(source, target))
         return target_recase
