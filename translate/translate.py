@@ -35,7 +35,7 @@ class Translation:
         for sent in sentences:
             sent_proces = self.tokenizer.tokenize_sentence(sent)
             sent_proces = self.truecaser.true_case_sentence(sent)
-            sent_proces = self.bpe.subword_sentence(sent) + ['\n']
+            sent_proces = self.bpe.subword_sentence(sent) + '\n'
             sentences_proces.append(sent_proces)
         translated_sentences = self.translator.infer(sentences_proces)
         translated_sentences = self.bpe.de_subword_sentences(translated_sentences)
