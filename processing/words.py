@@ -15,7 +15,7 @@ class IndexWords:
         self.word2id = dict()
         
         self.pad_word = pad_word
-    
+
         self.__create_index(sentences)
 
 
@@ -34,10 +34,10 @@ class IndexWords:
         for index, word in enumerate(vocab):
             self.id2word[index+1] = word
             self.word2id[word] = index+1
-    
+
     def get_vocabulary(self):
         return self.word2id.keys()
-    
+
     def get_word(self, idx):
         """
         :idx: return a word from the idx.
@@ -45,7 +45,7 @@ class IndexWords:
         Will return empty string if the idx is not in the dictionary
         """
         return self.word2id.get(idx, "")
-    
+
     def get_index(self, word):
         """
         :word: return an id from a word.
@@ -53,6 +53,6 @@ class IndexWords:
         Return -1 if the word is not in the dictionary
         """
         return self.word2id.get(word, -1)
-    
+
     def get_index_word(self):
         return self.id2word.items()

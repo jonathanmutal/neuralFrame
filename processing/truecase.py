@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from processing.utils import which_encoding
 
 
@@ -55,7 +53,7 @@ class TrueCase:
         for word, distribution in word_distributions:
             lower, upper = distribution.split('/')
             self.distribution_words[word] = {0: lower, 1: upper}
-    
+
     def is_upper(word):
         """
         This method will return if the word must be in upper
