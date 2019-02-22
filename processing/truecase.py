@@ -63,7 +63,7 @@ class TrueCase:
         """
         return max(self.distribution_words[word].items(), lambda p: p[1])[0]
 
-    def is_upper_sentence(sentence):
+    def is_upper_sentence(self, sentence):
         """
         This method will return if the first word of the sentences
         should be in upper
