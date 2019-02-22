@@ -7,7 +7,7 @@ class Translation:
     """
     This class will be in charge of translation a sentence.
     """
-    def __init__(self, config):
+    def __init__(self, config, lang='en'):
         """"
         All the files to do the pre-processing. First implementation.
         :config:
@@ -17,9 +17,9 @@ class Translation:
             - config_path -- path from the configuration files.
             - model_type -- the model name.
         """
-        self.__config = config
-        self.tokenizer = Tokenizer(self.__config.get('lang', 'en'))
-        self.detokenizer = Detokenizer(self.__config.get('lang', 'en'))
+        self.__config = config[lang]
+        self.tokenizer = Tokenizer(lang)
+        self.detokenizer = Detokenizer(lang)
         self.truecaser = TrueCase(modelfile=config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
         self.translator = Neural(self.__config)
@@ -41,3 +41,7 @@ class Translation:
         translated_sentences = self.truecaser.recaser_sentences(sentences, translated_sentences)
         translated_sentences = self.detokenizer.detokenize_sentences(translated_sentences)
         return translated_sentences
+
+    def close(self):
+        self.detokenizer.close()
+        self.tokenizer.close()
