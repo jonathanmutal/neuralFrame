@@ -1,4 +1,5 @@
 from processing.utils import which_encoding
+from collections import defaultdict
 
 
 class TrueCase:
