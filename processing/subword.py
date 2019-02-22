@@ -1,3 +1,6 @@
+import codecs
+
+
 from subword_nmt.learn_bpe import learn_bpe
 from subword_nmt.apply_bpe import BPE
 
