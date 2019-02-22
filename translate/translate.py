@@ -21,7 +21,7 @@ class Translation:
         self.__config = config[lang]
         self.tokenizer = Tokenizer(lang)
         self.detokenizer = Detokenizer(lang)
-        self.truecaser = TrueCase(modelfile=config.get('truecasemodel'))
+        self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
         self.translator = Neural(self.__config)
 
