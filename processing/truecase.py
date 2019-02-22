@@ -55,7 +55,7 @@ class TrueCase:
             lower, upper = distribution.split('/')
             self.distribution_words[word] = {0: lower, 1: upper}
 
-    def is_upper(word):
+    def is_upper(self, word):
         """
         This method will return if the word must be in upper
         :word: string
