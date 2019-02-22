@@ -38,7 +38,7 @@ class Detokenizer:
         """
         :lang: lang for the detokenizer
         """
-        self.__detokenizer = mosestokenizer.Detokenizer(lang)
+        self.__detokenizer = mosestokenizer.MosesDetokenizer(lang)
 
     def detokenize_sentence(self, sentence):
         """
