@@ -24,7 +24,7 @@ class Subword:
         self.merges = config.get('merges', -1)
         if not trainfile:
             codes = codecs.open(codesfile, encoding='utf-8')
-            self.__bpe = BPE(codes, merges)
+            self.__bpe = BPE(codes, self.merges)
         else:
             self.__learn()
 
