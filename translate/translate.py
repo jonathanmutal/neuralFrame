@@ -2,6 +2,7 @@ from processing.tokenizer import Tokenizer, Detokenizer
 from processing.subword import Subword
 from processing.truecase import TrueCase
 from translatorMT.neural import Neural
+from processing.utils import remove_s, remove_spaces
 
 
 class Translation:
@@ -41,7 +42,7 @@ class Translation:
         translated_sentences = self.bpe.de_subwords_sentences(translated_sentences)
         translated_sentences = self.truecaser.recaser_sentences(sentences, translated_sentences)
         translated_sentences = self.detokenizer.detokenize_sentences(translated_sentences)
-        return translated_sentences
+        return remove_spaces(remove_s(translated_sentences))
 
     def close(self):
         self.detokenizer.close()

@@ -63,6 +63,15 @@ class TrueCase:
         """
         return max(self.distribution_words.get(word.lower(), {0: 1, 1:0}).items(), key=lambda p: p[1])[0]
 
+    def get_first_word(self, sentence):
+        """
+        get the first word from a sentence
+        :sentence: string.
+        reutrn the first word of the sentence
+        """
+        return sentence.split(' ')[0]
+
+
     def is_upper_sentence(self, sentence):
         """
         This method will return if the first word of the sentences
@@ -70,7 +79,7 @@ class TrueCase:
         :sentence: string
         return  true if the first word of the sentences is upper
         """
-        first_word = sentence.split(' ')[0]
+        first_word = self.get_first_word(sentence)
         return self.is_upper(first_word)
 
     def upper_first_word(self, sentence):
@@ -81,6 +90,14 @@ class TrueCase:
         """
         return sentence[0].upper() + sentence[1:]
 
+    def lower_first_word(self, sentence):
+        """
+        This method will lower the first word of the sentence
+        :sentence: string
+        return the sentences with the first word lowered.
+        """
+        return sentence[0].lower() + sentence[1:]
+
     def true_case_sentence(self, sentence):
         """
         True case a single sentence with the distribution_words model.
@@ -89,6 +106,8 @@ class TrueCase:
         """
         if self.is_upper_sentence(sentence):
             sentence = self.upper_first_word(sentence)
+        else:
+            sentence = self.lower_first_word(sentence)
         return sentence
 
     def recaser_sentence(self, source_s, target_s):
@@ -98,9 +117,13 @@ class TrueCase:
         :target_s: target sentence.
         return a recase of the target sentence.
         """
-        if self.is_upper_sentence(source_s):
+        first_word = self.get_first_word(source_s)
+        if first_word.istitle():
             target_s = self.upper_first_word(target_s)
+        else:
+            target_s = self.lower_first_word(target_s)
         return target_s
+
 
     def recaser_sentences(self, source_sents, target_sents):
         """
@@ -111,5 +134,5 @@ class TrueCase:
         """
         target_recase = []
         for source, target in zip(source_sents, target_sents):
-            target_recase.append(self.recaser_sentence(source, target))
+            target_recase.append(self.recaser_sentence(, target))
         return target_recase

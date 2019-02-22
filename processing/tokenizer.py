@@ -45,7 +45,7 @@ class Detokenizer:
         :sentence: a string sentence.
         retun detokenized sentences.
         """
-        sentence_processed = self.__detokenizer(sentence.split(' '))
+        sentence_processed = self.__detokenizer(sentence.strip().split(' '))
         sentence_processed = remove_spaces(sentence_processed)
         return sentence_processed
 
