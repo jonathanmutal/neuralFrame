@@ -38,7 +38,7 @@ class Translation:
             sent_proces = self.bpe.subword_sentence(sent) + '\n'
             sentences_proces.append(sent_proces)
         translated_sentences = self.translator.infer(sentences_proces)
-        translated_sentences = self.bpe.de_subword_sentences(translated_sentences)
+        translated_sentences = self.bpe.de_subwords_sentences(translated_sentences)
         translated_sentences = self.truecaser.recaser_sentences(sentences, translated_sentences)
         translated_sentences = self.detokenizer.detokenize_sentences(translated_sentences)
         return translated_sentences
