@@ -1,4 +1,5 @@
 import codecs
+import re
 
 
 from subword_nmt.learn_bpe import learn_bpe
