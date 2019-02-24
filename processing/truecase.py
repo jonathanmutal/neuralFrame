@@ -30,6 +30,23 @@ class TrueCase:
         sentences = [sentences.strip().split() for sentences in train_file.readlines()]
         
         for sentence in sentences:
+            # if the first word is no capitalized, we don't have any doubt that
+            # is not capitalized
+            try:
+                first_word= sentence[0]
+            except IndexError:
+                print('first_word out of range:', sentence)
+                continue
+
+            if not first_word.istitle():
+                self.distribution_words[first_word.lower()][0] += 1
+
+            try:
+                sentence = sentence[1:]
+            except IndexError:
+                print('index out of range:', sentence, first_word)
+                continue
+
             for word in sentence:
                 # {'pedro': {0: 1, 1: 20}, 'hola': 0:120, 1:3}
                 self.distribution_words[word.lower()][word.istitle()] += 1
