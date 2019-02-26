@@ -7,7 +7,8 @@ from processing.utils import neural_posprocessed
 
 class Translation:
     """
-    This class will be in charge of translation a sentence.
+    This class will be in charge of translation a sentence with all
+    the preprocessing and posprocessing.
     """
     def __init__(self, config, lang='en'):
         """"
