@@ -1,0 +1,5 @@
+## Package
+build/
+dist/
+neuralFrame.egg-info/
+__pycache__/
