@@ -40,5 +40,5 @@ class Zip:
         zip_name = zipfile.ZipFile(self.__outpath, 'w')
         for f in self.__files:
             zip_name.write(f.filename[:-9] + '_out.docx.xlf')
-        shutil.rmtree(os.path.abspath(os.path.dirname(f.filename)))
+            shutil.rmtree(os.path.abspath(os.path.dirname(f.filename)))
         zip_name.close()
