@@ -30,8 +30,8 @@ class IndexWords:
         return len(self.id2word)
 
     def __add(self, token):
-        self.word2id[word] = self.size
-        self.id2word.insert(self.size, word)
+        self.word2id[token] = self.size
+        self.id2word.insert(self.size, token)
 
     def __create_index(self, vocabulary):
         """
