@@ -4,7 +4,7 @@ class IndexWords:
     A sentence would be understood by the algorithm as long as we map each word by 
     a number.
     """
-    def __init__(self, sentences=[], vocabulary_file='', pad_word='<pad>', begin=0):
+    def __init__(self, sentences=[], vocabulary_file='', pad_word='<pad>'):
         """
         :sentences: the sentences which contains most vocabulary.
                     It has to be a list of all the sentences.
@@ -12,26 +12,30 @@ class IndexWords:
         :pad_word: a word which will padded.
         :begin: number you like to begin index
         """
-        self.id2word = dict()
+        self.id2word = []
         self.word2id = dict()
         
         self.pad_word = pad_word
 
         self.vocabulary_file = vocabulary_file
-        self.begin = begin
 
         if sentences:
             self.__create_vocabulary_from_sentences(sentences)
-        elif vocabulary_file:
+        elif self.vocabulary_file:
             self.__load_vocabulary()
+
+    @property
+    def size(self):
+        """Returns the number of entries of the vocabulary."""
+        return len(self.id2word)
 
     def __create_index(self, vocabulary):
         """
         :vocabulary: an order structure for indexing words.
         """
-        for index, word in enumerate(vocabulary, self.begin):
-            self.id2word[index] = word
-            self.word2id[word] = index
+        for index, word in enumerate(vocabulary):
+            self.word2id[word] = self.size
+            self.id2word.insert(self.size, word)
 
     def __load_vocabulary(self):
         """
@@ -54,21 +58,21 @@ class IndexWords:
         self.__create_index(vocab)
 
     def get_vocabulary(self):
-        return self.word2id.keys()
+        return self.id2word
 
     def get_word(self, idx):
         """
         :idx: return a word from the idx.
         Will return empty string if the idx is not in the dictionary
         """
-        return self.word2id.get(idx, "")
+        return self.id2word[idx]
 
-    def get_index(self, word):
+    def get_index(self, token):
         """
         :word: return an id from a word.
         Return -1 if the word is not in the dictionary
         """
-        return self.word2id.get(word, -1)
+        return self.word2id.get(token, -1)
 
-    def get_index_word(self):
-        return self.id2word.items()
+    def is_in_vocab(self, token):
+        return word in self.id2word
