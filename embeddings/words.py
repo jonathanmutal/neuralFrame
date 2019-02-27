@@ -29,13 +29,16 @@ class IndexWords:
         """Returns the number of entries of the vocabulary."""
         return len(self.id2word)
 
+    def __add(self, token):
+        self.word2id[word] = self.size
+        self.id2word.insert(self.size, word)
+
     def __create_index(self, vocabulary):
         """
         :vocabulary: an order structure for indexing words.
         """
-        for index, word in enumerate(vocabulary):
-            self.word2id[word] = self.size
-            self.id2word.insert(self.size, word)
+        for word in vocabulary:
+            self.__add(word)
 
     def __load_vocabulary(self):
         """
