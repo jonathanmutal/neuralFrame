@@ -1,3 +1,5 @@
+from scipy.spatial.distance import cosine
+
 def levenshtein_distance(str1, str2):
     """
     dynamic levenshtein distance.
@@ -15,3 +17,6 @@ def levenshtein_distance(str1, str2):
         for j in range(1, len(str2)+1):
             d[i][j] = min(d[i][j-1]+1, d[i-1][j]+1, d[i-1][j-1]+(not str1[i-1] == str2[j-1]))
     return d[len(str1)][len(str2)]
+
+def cosine_distance(vector1, vector2):
+    return cosine(vector1, vector2)
