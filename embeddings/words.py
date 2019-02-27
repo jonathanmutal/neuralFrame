@@ -45,7 +45,7 @@ class IndexWords:
         load the vocabulary from a file.
         """
         with open(self.vocabulary_file, 'r') as vocab:
-            vocabulary = map(lambda word: word.strip(), vocab.readlines())
+            vocabulary = map(lambda word: word.rstrip(), vocab.readlines())
 
         self.__create_index(vocabulary)
 
