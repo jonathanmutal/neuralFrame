@@ -18,5 +18,10 @@ def levenshtein_distance(str1, str2):
             d[i][j] = min(d[i][j-1]+1, d[i-1][j]+1, d[i-1][j-1]+(not str1[i-1] == str2[j-1]))
     return d[len(str1)][len(str2)]
 
-def cosine_distance(vector1, vector2):
-    return cosine(vector1, vector2)
+def cosine_similarity(vector1, vector2):
+    """
+    scipy compute the cosine distance and not cosine similarity, so that we
+    add 1-cosine(v1, v2)
+    return cosine_similarity
+    """
+    return 1 - cosine(vector1, vector2)
