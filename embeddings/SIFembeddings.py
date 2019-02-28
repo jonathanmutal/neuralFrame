@@ -14,7 +14,6 @@ class SIFembeddings:
     our life
     """
     def __init__(self,
-                 sentences,
                  word_embeddings,
                  word_id,
                  weightfile,
@@ -22,7 +21,6 @@ class SIFembeddings:
                  weightpara=1e-3,
                  a=1e-3):
         """
-        :sentences: list of string with sentences.
         :word_embeddings: [size_vocab + 1, embeding_size] 
                          We[i,:] is the vector for word i.
         :word_id: a dict with word->id. It's a vocabulary.
@@ -32,12 +30,9 @@ class SIFembeddings:
         """
         self.word_id = word_id
         self.getWordWeight(weightfile, a)
-        self.sentences2id(sentences)
-        self.seq2weight()
 
         self.npc = num_principal_component
         self.We = word_embeddings
-        self.SIF_embedding()
 
     def getWordWeight(self, weightfile, a=1e-3):
         """
@@ -108,12 +103,14 @@ class SIFembeddings:
             emb[i,:] = self.sentences_weight[i,:].dot(self.We[x[i,:],:]) / np.count_nonzero(self.sentences_weight[i,:])
         return emb
 
-    def SIF_embedding(self):
+    def SIF_embedding(self, sentences):
         """
         Compute the scores between pairs of sentences using weighted average + removing the projection on the first principal component
         :return: emb, emb[i, :] is the embedding for sentence i
         """
         # return the average sentence
+        self.sentences2id(sentences)
+        self.seq2weight()
         emb = self.get_weighted_average()
         if  self.npc > 0:
             emb = remove_pc(emb, self.npc)
