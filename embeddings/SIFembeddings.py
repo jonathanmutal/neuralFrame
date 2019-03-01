@@ -58,7 +58,7 @@ class SIFembeddings:
     def sentences2id(self, sentences):
         sentences_id = []
         for sentence in sentences:
-            sentences_id.append([word_id[word] for word in sentence])
+            sentences_id.append([self.word_id[word] for word in sentence])
         self.sentences_id, self.masks = self.padd_sentences(sentences_id)
 
     def padd_sentence(self, sentence, max_length):
