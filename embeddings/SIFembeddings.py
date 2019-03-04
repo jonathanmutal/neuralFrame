@@ -23,7 +23,7 @@ class SIFembeddings:
         """
         :word_embeddings: [size_vocab + 1, embeding_size] 
                          We[i,:] is the vector for word i.
-        :word_id: a dict with word->id. It's a vocabulary.
+        :word_id: a function with word->id. It's a vocabulary. TODO
         :weightfile: the distribution of the words.
         :weightpara: a parameter for the word weight.
         :a: the parameter for weight
@@ -33,6 +33,7 @@ class SIFembeddings:
 
         self.npc = num_principal_component
         self.We = word_embeddings
+
 
     def getWordWeight(self, weightfile, a=1e-3):
         """
@@ -52,18 +53,18 @@ class SIFembeddings:
             N += float(freq)
         index2weight = {}
         for word, value in word2weight.items():
-            index2weight[self.word_id[word]] = a / (a + value/N)
+            index2weight[self.word_id(word)] = a / (a + value/N)
         self.index2weight = index2weight
 
     def sentences2id(self, sentences):
         sentences_id = []
         for sentence in sentences:
-            sentences_id.append([self.word_id[word] for word in sentence])
+            sentences_id.append([self.word_id(word) for word in sentence])
         self.sentences_id, self.masks = self.padd_sentences(sentences_id)
 
     def padd_sentence(self, sentence, max_length):
-        sentence_id = np.zeros(max_length)
-        mask = np.zeros(max_length)
+        sentence_id = np.zeros(max_length, dtype=np.int32)
+        mask = np.zeros(max_length, dtype=np.int32)
         
         sentence_id[:len(sentence)] = sentence
         mask[:len(sentence)] = np.ones(len(sentence))
@@ -74,18 +75,18 @@ class SIFembeddings:
 
         sentences_padded_id, masks = [], []
         for sentence_id in sentences_id:
-            sentence_padded_id, mask = padd_sentence(sentence_id, max_length)
+            sentence_padded_id, mask = self.padd_sentence(sentence_id, max_length)
             sentences_padded_id.append(sentence_padded_id)
             masks.append(mask)
         return np.array(sentences_padded_id), np.array(masks)
 
     def seq2weight(self):
-        weight = np.zeros(self.sentences_id.shape).astype('float32')
+        weight = np.zeros(self.sentences_id.shape, dtype=np.float32)
         for i in range(self.sentences_id.shape[0]):
             for j in range(self.sentences_id.shape[1]):
                 if self.masks[i,j] > 0 and self.sentences_id[i, j] >= 0:
                     weight[i,j] = self.index2weight[self.sentences_id[i, j]]
-        weight = np.asarray(weight, dtype='float32')
+        weight = np.asarray(weight, dtype=np.float32)
         self.sentences_weight = weight
 
     def get_weighted_average(self):
@@ -100,7 +101,7 @@ class SIFembeddings:
         embeding_size = self.We.shape[1]
         emb = np.zeros((n_samples, embeding_size))
         for i in range(n_samples):
-            emb[i,:] = self.sentences_weight[i,:].dot(self.We[x[i,:],:]) / np.count_nonzero(self.sentences_weight[i,:])
+            emb[i,:] = self.sentences_weight[i,:].dot(self.We[self.sentences_id[i,:],:]) / np.count_nonzero(self.sentences_weight[i,:])
         return emb
 
     def SIF_embedding(self, sentences):
@@ -112,6 +113,7 @@ class SIFembeddings:
         self.sentences2id(sentences)
         self.seq2weight()
         emb = self.get_weighted_average()
-        if  self.npc > 0:
+        if self.npc > 0:
             emb = remove_pc(emb, self.npc)
         return emb
+

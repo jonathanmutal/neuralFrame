@@ -12,7 +12,7 @@ def compute_pc(X, npc=1):
     svd.fit(X)
     return svd.components_
 
-def remove_pc(self, X, npc=1):
+def remove_pc(X, npc=1):
     """
     Remove the projection on the principal components
     :param X: X[i,:] is a data point for a sentences
