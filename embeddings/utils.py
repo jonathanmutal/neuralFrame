@@ -1,3 +1,6 @@
+import numpy as np
+
+
 from sklearn.decomposition import TruncatedSVD
 
 
@@ -25,3 +28,18 @@ def remove_pc(X, npc=1):
     else:
         XX = X - X.dot(pc.transpose()).dot(pc)
     return XX
+
+def save_word_embeddings(embeddings, file_to_dump):
+    """
+    dump the embeddings into a .txt file.
+    :embeddings: the embeddings has to be an numpy type.
+    """
+    np.save(file_to_dump, embedding_deco, allow_pickle=False)
+
+def load_word_embedding(file_to_load):
+    """
+    load word embeddings from a txt file.
+    :file_to_load: a path to a file with the embeddings (.npy)
+    return the embeddings with a numpy type
+    """
+    return np.load(file_to_load, allow_pickle=False)

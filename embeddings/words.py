@@ -4,7 +4,7 @@ class IndexWords:
     A sentence would be understood by the algorithm as long as we map each word by 
     a number.
     """
-    def __init__(self, sentences=[], vocabulary_file='', pad_word='<pad>'):
+    def __init__(self, sentences=[], vocabulary_file='', pad_word='<s>'):
         """
         :sentences: the sentences which contains most vocabulary.
                     It has to be a list of all the sentences.
