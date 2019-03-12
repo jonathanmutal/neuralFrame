@@ -10,7 +10,8 @@ class TrueCase:
     def __init__(self, modelfile, infile=''):
         """
         :modelfile: the file model.
-        :infile: the file to train the model. If it's not given, the class will train a new model.
+        :infile: sentences to train the model.
+                 If it's not given, the class will train a new model.
         """
         self.modelfile = modelfile
         self.infile = infile
@@ -126,6 +127,12 @@ class TrueCase:
         else:
             sentence = self.lower_first_word(sentence)
         return sentence
+
+    def true_case_sentences(self, sentences):
+        """
+        Truecase a list of sentences
+        """
+        return [self.true_case_sentence(sent) for sent in sentences]
 
     def recaser_sentence(self, source_s, target_s):
         """
