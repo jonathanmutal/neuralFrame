@@ -13,6 +13,15 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/joni115/neuralFrame",
     packages=find_packages(),
+    install_requires=[
+        "pandas",
+        "pyyaml",
+        "scipy",
+        "numpy",
+        "sklearn",
+        "subword_nmt",
+        "mosestokenizer"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
