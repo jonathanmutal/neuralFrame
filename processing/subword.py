@@ -12,7 +12,7 @@ class Subword:
     A subword-nmt wrapper.
     https://arxiv.org/abs/1508.07909.
     """
-    def __init__(self, codesfile, trainfile='', num_symbols=50000, min_frequency=2, **config):
+    def __init__(self, codesfile, trainfile='', num_symbols=32000, min_frequency=2, **config):
         """
         :codesfile: a file with the code
         :trainfile: if a trainfile is passed as an argument. The model will be training
@@ -23,8 +23,9 @@ class Subword:
         self.num_symbols = num_symbols
         self.min_frequency = min_frequency
         self.merges = config.get('merges', -1)
+        self.codesfile = codesfile
         if not trainfile:
-            codes = codecs.open(codesfile, encoding='utf-8')
+            codes = codecs.open(self.codesfile, encoding='utf-8')
             self.__bpe = BPE(codes, self.merges)
         else:
             self.__learn()
