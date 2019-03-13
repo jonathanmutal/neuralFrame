@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='neuralFrame',
-    version='0.1',
+    version='0.2',
     author='Jonathan D. Mutal',
     author_email='Jonathan.Mutal@unige.ch',
     long_description=long_description,
@@ -20,7 +20,8 @@ setup(
         "numpy",
         "sklearn",
         "subword_nmt",
-        "mosestokenizer"
+        "mosestokenizer",
+        "chardet"
     ],
     classifiers=[
         "Programming Language :: Python :: 3.6",
