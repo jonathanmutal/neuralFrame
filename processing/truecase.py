@@ -32,6 +32,7 @@ class TrueCase:
         if self.infile:
             train_file = open(self.infile, 'r', encoding=which_encoding(self.infile))
             sentences = train_file.readlines()
+            train_file.close()
         else:
             sentences = self.sentences
 
@@ -66,7 +67,6 @@ class TrueCase:
             # word times_lower/times_upper
             model_file.write('{0} {1}/{2}\n'.format(word, distribution[0], distribution[1]))
 
-        train_file.close()
         model_file.close()
 
     def __load_distribution(self):
