@@ -28,7 +28,7 @@ class Tokenizer:
         list of sentences to be tokenized
         :sentences: list of string
         """
-        return [self.tokenize_sentence(sentence) for sent in sentences]
+        return [self.tokenize_sentence(sent) for sent in sentences]
 
     def close(self):
         """
