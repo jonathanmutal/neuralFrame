@@ -7,17 +7,19 @@ class TrueCase:
     This class allow you to create a truecase model. the simplest one.
     https://en.wikipedia.org/wiki/Truecasing.
     """
-    def __init__(self, modelfile, infile=''):
+    def __init__(self, modelfile, sentences=[], infile=''):
         """
         :modelfile: the file model.
         :infile: sentences to train the model.
                  If it's not given, the class will train a new model.
+        :sentences: list of sentences to train the model.
         """
         self.modelfile = modelfile
         self.infile = infile
         self.distribution_words = defaultdict(lambda: defaultdict(int))
+        self.sentences = sentences
 
-        if self.infile:
+        if self.infile or self.sentences:
             self.__train_truecase()
         else:
             self.__load_distribution()
@@ -27,9 +29,15 @@ class TrueCase:
         :infile: path to the train data.
         return a model in modelfile.
         """
-        train_file = open(self.infile, 'r', encoding=which_encoding(self.infile))
-        sentences = [sentences.strip().split() for sentences in train_file.readlines()]
-        
+        if self.infile:
+            train_file = open(self.infile, 'r', encoding=which_encoding(self.infile))
+            sentences = train_file.readlines()
+        else:
+            sentences = self.sentences
+
+        assert(len(sentences) != 0)
+        sentences = [sentence.strip().split() for sentence in sentences]
+
         for sentence in sentences:
             # if the first word is no capitalized, we don't have any doubt that
             # is not capitalized

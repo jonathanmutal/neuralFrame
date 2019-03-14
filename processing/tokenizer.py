@@ -23,6 +23,13 @@ class Tokenizer:
         """
         return ' '.join(self.__tokenizer(sentence))
 
+    def tokenize_sentences(self, sentences):
+        """
+        list of sentences to be tokenized
+        :sentences: list of string
+        """
+        return [self.tokenize_sentence(sentence) for sent in sentences]
+
     def close(self):
         """
         Close the tokenizer
