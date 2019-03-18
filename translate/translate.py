@@ -21,7 +21,7 @@ class Translation:
             - model_type -- the model name.
         """
         self.__config = config[lang]
-        self.tokenizer = lambda sent: Tokenizer(lang)(sent) if tokenizer else id
+        self.tokenizer = lambda sent: Tokenizer(lang).tokenize_sentence(sent) if tokenizer else id
         self.detokenizer = Detokenizer(lang)
         self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
