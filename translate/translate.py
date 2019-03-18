@@ -21,7 +21,7 @@ class Translation:
             - model_type -- the model name.
         """
         self.__config = config[lang]
-        self.tokenizer = Tokenizer(lang) if tokenizer else id
+        self.tokenizer = lambda sent: Tokenizer(lang)(sent) if tokenizer else id
         self.detokenizer = Detokenizer(lang)
         self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
@@ -35,7 +35,7 @@ class Translation:
         sent_proces = ''
         sentences_proces = []
         for sent in sentences:
-            sent_proces = self.tokenizer.tokenize_sentence(sent)
+            sent_proces = self.tokenizer(sent)
             sent_proces = self.truecaser.true_case_sentence(sent)
             sent_proces = self.bpe.subword_sentence(sent) + '\n'
             sentences_proces.append(sent_proces)
@@ -44,6 +44,18 @@ class Translation:
         translated_sentences = self.truecaser.recaser_sentences(sentences, translated_sentences)
         translated_sentences = self.detokenizer.detokenize_sentences(translated_sentences)
         return neural_posprocessed(translated_sentences)
+
+    def translate_file(self, path_in, path_out):
+        """
+        :path_in: path which are the sentences to translate.
+        :path_out: path for the translated sentences
+        """
+        with open(path_in, 'r') as f_in:
+            sentences = f_in.readlines()
+
+        file_out = open(path_out, 'w')
+        file_out.write(self.translate_sentences(sentences))
+        file_out.close()
 
     def close(self):
         self.detokenizer.close()
