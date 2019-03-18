@@ -45,17 +45,23 @@ class Translation:
         translated_sentences = self.detokenizer.detokenize_sentences(translated_sentences)
         return neural_posprocessed(translated_sentences)
 
-    def translate_file(self, path_in, path_out):
+    def translate_file(self, path_in, path_out=''):
         """
         :path_in: path which are the sentences to translate.
-        :path_out: path for the translated sentences
+        :path_out: path for the translated sentences. If doesn't
+        give, just return the translated sentences
+        return a list of translated sentences
         """
         with open(path_in, 'r') as f_in:
-            sentences = f_in.readlines()
+            sentences = list(map(lambda sent: sent.strip(), f_in.readlines()))
 
-        file_out = open(path_out, 'w')
-        file_out.write(self.translate_sentences(sentences))
-        file_out.close()
+        translated_sentences = self.translate_sentences(sentences)
+        if path_out:
+            file_out = open(path_out, 'w')
+            file_out.writelines([sent + '\n' for sent in translated_sentences])
+            file_out.close()
+
+        return translated_sentences
 
     def close(self):
         self.detokenizer.close()

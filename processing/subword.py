@@ -25,8 +25,7 @@ class Subword:
         self.merges = config.get('merges', -1)
         self.codesfile = codesfile
         if not trainfile:
-            codes = codecs.open(self.codesfile, encoding='utf-8')
-            self.__bpe = BPE(codes, self.merges)
+            self.__open_bpe()
         else:
             self.__learn()
 
@@ -41,8 +40,17 @@ class Subword:
         trainfile = codecs.open(self.trainfile, encoding='utf-8')
         codesfile = codecs.open(self.codesfile, mode='w', encoding='utf-8')
         learn_bpe(trainfile, codesfile, self.num_symbols, self.min_frequency)
-        self.__bpe = BPE(codes, self.merges)
 
+        self.__open_bpe()
+
+
+    def __open_bpe(self):
+        """
+        This method is in charge of open BPE file
+        """
+        codes = codecs.open(self.codesfile, encoding='utf-8')
+        self.__bpe = BPE(codes, self.merges)
+ 
     def subword_sentence(self, sentence):
         """
         :sentence: a list of words which will process.
