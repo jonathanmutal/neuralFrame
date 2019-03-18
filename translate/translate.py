@@ -10,7 +10,7 @@ class Translation:
     This class will be in charge of translation a sentence with all
     the preprocessing and posprocessing.
     """
-    def __init__(self, config, lang='en'):
+    def __init__(self, config, lang='en', tokenizer=True):
         """"
         All the files to do the pre-processing. First implementation.
         :config:
@@ -21,7 +21,7 @@ class Translation:
             - model_type -- the model name.
         """
         self.__config = config[lang]
-        self.tokenizer = Tokenizer(lang)
+        self.tokenizer = Tokenizer(lang) if tokenizer else id
         self.detokenizer = Detokenizer(lang)
         self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
