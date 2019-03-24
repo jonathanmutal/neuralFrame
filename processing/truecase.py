@@ -93,10 +93,16 @@ class TrueCase:
         """
         get the first word from a sentence
         :sentence: string.
-        reutrn the first word of the sentence
+        reutrn the first word of the sentence and the remaining part in other list
         """
-        return sentence.split(' ')[0]
-
+        sentence_splited = sentence.split(' ')
+        first_word = sentence_splited[0]
+        try:
+            remaining = sentence_splited[1:]
+            remaining = ' '.join(remaining)
+        except IndexError:
+            remaining = ''
+        return first_word, remaining
 
     def is_upper_sentence(self, sentence):
         """
@@ -105,7 +111,7 @@ class TrueCase:
         :sentence: string
         return  true if the first word of the sentences is upper
         """
-        first_word = self.get_first_word(sentence)
+        first_word, _ = self.get_first_word(sentence)
         return self.is_upper(first_word)
 
     def upper_first_word(self, sentence):
@@ -122,7 +128,8 @@ class TrueCase:
         :sentence: string
         return the sentences with the first word lowered.
         """
-        return sentence[0].lower() + sentence[1:]
+        first_word, sentence = self.get_first_word(sentence)
+        return first_word.lower() + ' ' + sentence
 
     def true_case_sentence(self, sentence):
         """
@@ -130,9 +137,7 @@ class TrueCase:
         :sentence: a sequence of strings
         return a truecased sentence.
         """
-        if self.is_upper_sentence(sentence):
-            sentence = self.upper_first_word(sentence)
-        else:
+        if not self.is_upper_sentence(sentence):
             sentence = self.lower_first_word(sentence)
         return sentence
 
@@ -149,7 +154,7 @@ class TrueCase:
         :target_s: target sentence.
         return a recase of the target sentence.
         """
-        first_word = self.get_first_word(source_s)
+        first_word, _ = self.get_first_word(source_s)
         if first_word.istitle():
             target_s = self.upper_first_word(target_s)
         else:
