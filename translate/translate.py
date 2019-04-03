@@ -63,6 +63,3 @@ class Translation:
 
         return translated_sentences
 
-    def close(self):
-        self.detokenizer.close()
-        self.tokenizer.close()

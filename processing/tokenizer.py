@@ -1,5 +1,4 @@
-import mosestokenizer
-
+from sacremoses import MosesTokenizer, MosesDetokenizer, MosesPunctNormalizer
 from processing.utils import remove_spaces
 
 """
@@ -10,18 +9,18 @@ class Tokenizer:
     """
     This class will be a wrapper of MosesTokenizer.
     """
-    def __init__(self, lang='en'):
+    def __init__(self, lang='en', normalizer=True):
         """
         :lang: lang for the tokenizer
         """
-        self.__tokenizer = mosestokenizer.MosesTokenizer(lang)
+        self.__tokenizer = MosesTokenizer(lang)
 
     def tokenize_sentence(self, sentence):
         """
         :sentence: a string sentence.
         retun tokenized sentence.
         """
-        return ' '.join(self.__tokenizer(sentence))
+        return self.__tokenizer.tokenize(sentence, return_str=True)
 
     def tokenize_sentences(self, sentences):
         """
@@ -29,12 +28,6 @@ class Tokenizer:
         :sentences: list of string
         """
         return [self.tokenize_sentence(sent) for sent in sentences]
-
-    def close(self):
-        """
-        Close the tokenizer
-        """
-        self.__tokenizer.close()
 
 
 class Detokenizer:
@@ -45,15 +38,14 @@ class Detokenizer:
         """
         :lang: lang for the detokenizer
         """
-        self.__detokenizer = mosestokenizer.MosesDetokenizer(lang)
+        self.__detokenizer = MosesDetokenizer(lang)
 
     def detokenize_sentence(self, sentence):
         """
         :sentence: a string sentence.
         retun detokenized sentences.
         """
-        sentence_processed = self.__detokenizer(sentence.strip().split(' '))
-        sentence_processed = remove_spaces(sentence_processed)
+        sentence_processed = self.__detokenizer.detokenize(sentence.strip().split(' '))
         return sentence_processed
 
     def detokenize_sentences(self, sentences):
@@ -63,8 +55,3 @@ class Detokenizer:
         """
         return [self.detokenize_sentence(sent) for sent in sentences]
 
-    def close(self):
-        """
-        Close the tokenizer
-        """
-        self.__detokenizer.close()

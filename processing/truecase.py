@@ -1,6 +1,7 @@
 from processing.utils import which_encoding
 from collections import defaultdict
 
+from sacremoses import MosesTruecaser
 
 class TrueCase:
     """
@@ -16,70 +17,35 @@ class TrueCase:
         """
         self.modelfile = modelfile
         self.infile = infile
-        self.distribution_words = defaultdict(lambda: defaultdict(int))
         self.sentences = sentences
 
         if self.infile or self.sentences:
-            self.__train_truecase()
+            self.__truecaser = self.__train_truecase()
         else:
-            self.__load_distribution()
+            self.__truecaser = self.__load_truecaser()
 
     def __train_truecase(self):
         """
         :infile: path to the train data.
         return a model in modelfile.
         """
+        sentences = self.sentences
         if self.infile:
-            train_file = open(self.infile, 'r', encoding=which_encoding(self.infile))
-            sentences = train_file.readlines()
-            train_file.close()
-        else:
-            sentences = self.sentences
+            with open(self.infile, 'r', encoding=which_encoding(self.infile)) as train_file:
+                sentences = train_file.readlines()
 
         assert(len(sentences) != 0)
         sentences = [sentence.strip().split() for sentence in sentences]
-
-        for sentence in sentences:
-            # if the first word is no capitalized, we don't have any doubt that
-            # is not capitalized
-            try:
-                first_word= sentence[0]
-            except IndexError:
-                print('first_word out of range:', sentence)
-                continue
-
-            if not first_word.istitle():
-                self.distribution_words[first_word.lower()][0] += 1
-
-            try:
-                sentence = sentence[1:]
-            except IndexError:
-                print('index out of range:', sentence, first_word)
-                continue
-
-            for word in sentence:
-                # {'pedro': {0: 1, 1: 20}, 'hola': 0:120, 1:3}
-                self.distribution_words[word.lower()][word.istitle()] += 1
-
-        model_file = open(self.modelfile, 'w', encoding='utf-8')
-        for word, distribution in self.distribution_words.items():
-            # dump a file with the distribution
-            # word times_lower/times_upper
-            model_file.write('{0} {1}/{2}\n'.format(word, distribution[0], distribution[1]))
-
-        model_file.close()
-
-    def __load_distribution(self):
+        mtr = MosesTruecaser()
+        mtr.train(sentences, save_to=self.modelfile, processes=20, progress_bar=True)
+        return mtr
+        
+    def __load_truecaser(self):
         """"
         Load the model file to do truecasting.
         The model will be load onto distribution_words attribute.
         """
-        with open(self.modelfile, 'r', encoding='utf-8') as f:
-            word_distributions = map(lambda distribution: distribution.strip().split(' '), f.readlines())
-
-        for word, distribution in word_distributions:
-            lower, upper = distribution.split('/')
-            self.distribution_words[word] = {0: int(lower), 1: int(upper)}
+        return MosesTruecaser(self.modelfile)  
 
     def is_upper(self, word):
         """
@@ -137,9 +103,7 @@ class TrueCase:
         :sentence: a sequence of strings
         return a truecased sentence.
         """
-        if not self.is_upper_sentence(sentence):
-            sentence = self.lower_first_word(sentence)
-        return sentence
+        return self.__truecaser.truecase(sentence, return_str=True)
 
     def true_case_sentences(self, sentences):
         """
