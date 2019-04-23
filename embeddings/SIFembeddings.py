@@ -17,7 +17,6 @@ class SIFembeddings:
                  word_embeddings,
                  word_id,
                  weightfile,
-                 num_principal_component=1,
                  weightpara=1e-3,
                  a=1e-3):
         """
@@ -31,7 +30,6 @@ class SIFembeddings:
         self.word_id = word_id
         self.getWordWeight(weightfile, a)
 
-        self.npc = num_principal_component
         self.We = word_embeddings
 
 
@@ -104,7 +102,7 @@ class SIFembeddings:
             emb[i,:] = self.sentences_weight[i,:].dot(self.We[self.sentences_id[i,:],:]) / np.count_nonzero(self.sentences_weight[i,:])
         return emb
 
-    def SIF_embedding(self, sentences):
+    def SIF_embedding(self, sentences, npc=1):
         """
         Compute the scores between pairs of sentences using weighted average + removing the projection on the first principal component
         :return: emb, emb[i, :] is the embedding for sentence i
@@ -113,7 +111,7 @@ class SIFembeddings:
         self.sentences2id(sentences)
         self.seq2weight()
         emb = self.get_weighted_average()
-        if self.npc > 0:
-            emb = remove_pc(emb, self.npc)
+        if npc > 0:
+            emb = remove_pc(emb, npc)
         return emb
 

@@ -13,6 +13,7 @@ def compute_pc(X, npc=1):
     """
     svd = TruncatedSVD(n_components=npc, n_iter=7, random_state=0)
     svd.fit(X)
+
     return svd.components_
 
 def remove_pc(X, npc=1):

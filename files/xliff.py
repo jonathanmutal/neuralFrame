@@ -47,7 +47,6 @@ class Xliff:
         """
         sentences_to_translate = self.__get_source_sentences()
         sentences_t = self.__translator.translate_sentences(sentences_to_translate)
-        self.__translator.close()
 
         string_xml = self.__xliff
         for sent in sentences_t:
