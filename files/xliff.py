@@ -56,7 +56,6 @@ class Xliff:
         for transunit in trans_units:
             for sent in transunit.split('<source>'):
                 to_translate.append(self.__to_translate(sent))
-        print(to_translate)
         ## extract the source and flat the list and It's ready to translate.
         source_target = list(filter(lambda sent: len(sent[0]) > 0, to_translate))
         return self.__clean_source(source_target)

@@ -14,9 +14,9 @@ LINK = re.compile('(http|ftp|https|www)(://)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?
 def turnLink(sent_s, sent_t):
     link = LINK.findall(sent_s)
     if link:
-        link = ''.join(map(str, link))
-        sent_t = re.sub('LINNK', link[0], sent_t)
-        sent_t = re.sub('linnk', link[0], sent_t)
+        link = ''.join(link[0])
+        sent_t = re.sub('LINNK', link, sent_t)
+        sent_t = re.sub('linnk', link, sent_t)
     return sent_t
 
 def turnDates(sent_s, sent_t):
