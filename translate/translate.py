@@ -22,8 +22,8 @@ class Translation:
             - model_type -- the model name.
         """
         self.__config = config[lang]
-        self.preprocessing = lambda sent: neural_preprocessing if self.__config['preprocessing'] else sent
-        self.posprocessing = lambda sents_s, sents_t: recoverEntities(sents_s, sents_t) if recoverEntities else sents_t
+        self.preprocessing = lambda sent: neural_preprocessing(sent) if self.__config['preprocessing'] else sent
+        self.posprocessing = lambda sents_s, sents_t: recoverEntities(sents_s, sents_t) if self.__config['recoverEntities'] else sents_t
         self.tokenizer = lambda sent: Tokenizer(lang).tokenize_sentence(sent) if self.__config['tokenizer'] else sent
         self.detokenizer = lambda sent: Detokenizer(lang).detokenize_sentences(sent) if self.__config['tokenizer'] else sent
         self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
