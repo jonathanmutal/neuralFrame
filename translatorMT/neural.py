@@ -27,9 +27,9 @@ class Neural:
         self.__config['model_type'] = config['model_type']
         self.__config['checkpoint_path'] = config['checkpoint_path']
 
-        model = load_model(self.__config["model_dir"],
+        model = load_model(self.__config['model_dir'],
                            model_name=self.__config['model_type'])
-        self.model = Runner(model, self.__config)
+        self.model = Runner(model, self.__config, auto_config=self.__config['auto_config'])
 
 
     def infer(self, sentences):
