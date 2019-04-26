@@ -29,7 +29,7 @@ class Neural:
 
         model = load_model(self.__config['model_dir'],
                            model_name=self.__config['model_type'])
-        self.model = Runner(model, self.__config, auto_config=self.__config['auto_config'])
+        self.model = Runner(model, self.__config, auto_config=config['auto_config'])
 
 
     def infer(self, sentences):
