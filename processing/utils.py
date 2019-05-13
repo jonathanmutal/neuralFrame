@@ -47,12 +47,19 @@ def normalize(sentence):
     clean_sent = mosesNorm.normalize(sentence)
     return clean_sent
 
+def change_quotes(sentence):
+    for i in range(sentence.count('"')):
+        if i % 2:
+            sentence = sentence.sub('"', '«', sentence, count=1)
+        else:
+            sentence = sentence.sub('"', '»', sentence, count=1)
+    return sentence
 
 def turnApost(sentence):
     """
     turn all the Apostrophes to '.
     """
-    clean_sentence =  re.sub(r'(\D)’', r'\1\'', sentence)
+    clean_sentence =  re.sub(r'(\D)’', r"\1'", sentence)
     return clean_sentence
 
 

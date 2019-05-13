@@ -2,7 +2,7 @@ from processing.tokenizer import Tokenizer, Detokenizer
 from processing.subword import Subword
 from processing.truecase import TrueCase
 from translatorMT.neural import Neural
-from processing.utils import neural_posprocessed, neural_preprocessing, recoverEntities
+from processing.utils import neural_posprocessed, neural_preprocessing, recoverEntities, turnApost, change_quotes
 
 
 class Translation:
@@ -21,10 +21,13 @@ class Translation:
             - config_path -- path from the configuration files.
             - model_type -- the model name.
         """
+        source_lang = config['source_lang']
         self.__config = config[lang]
         self.preprocessing = lambda sent: neural_preprocessing(sent) if self.__config['preprocessing'] else sent
+        self.fr_it = lambda sent: turnApost(sent) if source_lang in ['fr', 'it'] else sent
+        self.fr = lambda sent: change_quotes(sent) if source_lang == 'fr' else sent
         self.posprocessing = lambda sents_s, sents_t: recoverEntities(sents_s, sents_t) if self.__config['recoverEntities'] else sents_t
-        self.tokenizer = lambda sent: Tokenizer(lang).tokenize_sentence(sent) if self.__config['tokenizer'] else sent
+        self.tokenizer = lambda sent: Tokenizer(source_lang).tokenize_sentence(sent) if self.__config['tokenizer'] else sent
         self.detokenizer = lambda sent: Detokenizer(lang).detokenize_sentences(sent) if self.__config['tokenizer'] else sent
         self.truecaser = TrueCase(modelfile=self.__config.get('truecasemodel'))
         self.bpe = Subword(codesfile=self.__config.get('codesfile'))
@@ -39,6 +42,7 @@ class Translation:
         sentences_proces = []
         for sent in sentences:
             sent_proces = self.preprocessing(sent)
+            sent_proces = self.fr_it(sent_proces)
             sent_proces = self.tokenizer(sent_proces)
             sent_proces = self.truecaser.true_case_sentence(sent_proces)
             sent_proces = self.bpe.subword_sentence(sent_proces) + '\n'
@@ -49,7 +53,7 @@ class Translation:
         translated_sentences = self.detokenizer(translated_sentences)
         translated_sentences = neural_posprocessed(translated_sentences)
         translated_sentences = self.posprocessing(sentences, translated_sentences)
-        return translated_sentences
+        return self.fr(translated_sentences)
 
     def translate_file(self, path_in, path_out=''):
         """
